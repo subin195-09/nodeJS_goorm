@@ -12,6 +12,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
+// 웹 서버의 포트값을 설정하는 부분, 정해진 포트 값이 없으면 기본적으로 포트 3000으로 실행
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
@@ -19,6 +20,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
+// 이 코드의 포트 설정으로 http서버를 만든다.
 var server = http.createServer(app);
 
 /**
