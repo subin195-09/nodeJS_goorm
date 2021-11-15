@@ -2,4 +2,8 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p#goormDiv.goormClass This is main page!
+  //- 기본 태그는 div이다.
+  #contents(stype="border:1px solid black;")
+    input(type="checkbox", checked)
+    | Hello World!
