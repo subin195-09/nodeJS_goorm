@@ -13,6 +13,8 @@ html
 				button.btn.btn-info(type='button') Skim 채팅방
 			div
 				textarea#chatLog.form-control(readonly='')
+				ul#list.list-grouplist
+					li why
 			form#chat
 				input#name.form-contorl(type='text')
 				input#message.form-contorl(type='text')
@@ -24,26 +26,37 @@ html
 
 			// 전송 버튼을 눌렀을 때
 			$('#chat').on('submit', function(e) {
-			socket.emit('send message', $('#name').val(), $('#message').val());
-			$('#message').val('');
-			$('#message').focus();
-			e.preventDefault();
+				socket.emit('send message', $('#name').val(), $('#message').val());
+				$('#message').val('');
+				$('#message').focus();
+				e.preventDefault();
 			});
 
 			// 이름 셋팅
 			socket.on('create name', function(name) {
-			$('#name').val(name);
+				$('#name').val(name);
+			});
+
+			// list 셋팅하기
+			socket.on('list_setting', function(names){
+				console.log('event test');
+				$('#list').empty();
+				for(var i = 0; i < names.length; i++) {
+					console.log(names[i]);
+					$('#list').append('<li>' + names[i] + '</li>');
+				}
 			});
 
 			// 메세지 받았을 때
 			socket.on('receive message', function(msg) {
-			$('#chatLog').append(msg + '\n')
-			$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
+				$('#chatLog').append(msg + '\n')
+				$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 			});
 
 			// 채팅방에 접속했을 때 (알림)
-			socket.on('new_connect', function(name) {
+			socket.on('new_connect', function(name, names) {
 				$('#chatLog').append('<알림> ' + name + '님이 채팅창에 접속했습니다.\n');
+				io.emit('list_setting', names);
 			});
 
 			// 닉네임 변경 (알림)

@@ -16,13 +16,18 @@ app.get('/', (req, res) => {
 var count = 1;
 
 io.on('connection', function(socket) {
+	var names = [];
+
 	// 채팅방 접속했을 때
 	console.log('user connected: ', socket.id);
 	var name = 'user' + count++;
 	socket.name = name;
+	names.push(name);
 	io.to(socket.id).emit('create name', name);
 
-	io.emit('new_connect', name);
+	io.emit('new_connect', name, names);
+
+	io.emit('list_setting', names);
 
 	// 채팅방 접속이 끊어졌을 때
 	socket.on('disconnect', function() {
