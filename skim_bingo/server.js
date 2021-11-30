@@ -4,20 +4,23 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
 
-app.set('views', path.join(__dirname, 'views'));
+
+// view engine setup
 app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-	res.render('main', { title: '온라인 빙고 게임', username: req.query.username });
+	res.render(path.join(__dirname, 'public', 'views', 'main'), { title: '온라인 빙고 게임', username: req.query.username });
 });
 
 var users = {};
 var user_count = 0;
 var turn_count = 0;
 
-io.on('connection', function(socket) {
-	console.log('user connected', socket.id);
+io.on('connection', function(socket){
+
+	console.log('user connected : ', socket.id);
 
 	socket.on('join', function (data) {
 		var username = data.username;
@@ -39,13 +42,13 @@ io.on('connection', function(socket) {
 		io.emit('update_users', users);
 	});
 
-	socket.on('select', function(data) {
-		socket.broadcast.emit('check_number', data);
+	socket.on('select', function (data) {
+		socket.broadcast.emit("check_number", data);
 
 		users[turn_count].turn = false;
 		turn_count++;
 
-		if (turn_count >= user_count) {
+		if(turn_count >= user_count) {
 			turn_count = 0;
 		}
 		users[turn_count].turn = true;
@@ -55,8 +58,8 @@ io.on('connection', function(socket) {
 
 	socket.on('disconnect', function() {
 		console.log('user disconnected : ', socket.id, socket.username);
-		for (var i = 0; i < user_count; i++) {
-			if (users[i].id == socket.id)
+		for(var i=0; i<user_count; i++){
+			if(users[i].id == socket.id)
 				delete users[i];
 		}
 
@@ -65,6 +68,7 @@ io.on('connection', function(socket) {
 	});
 });
 
-http.listen(3000, function() {
-	console.log('skim_bingo server on...!');
+http.listen(3000, function(){
+  console.log('server on!');
 });
+
