@@ -5,7 +5,8 @@ html
 		link(rel='stylesheet', href='/stylesheets/style.css')
 		script(src='/socket.io/socket.io.js')
 		script(src='//code.jquery.com/jquery.min.js')
-		script(src='javascripts/main.js')
+		script(src='javascripts/main.js' defer)
+		//- defet : html 페이지가 로드된 후 js가 로드된다.
 	body
 		center
 			block content

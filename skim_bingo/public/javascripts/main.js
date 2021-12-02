@@ -12,12 +12,12 @@ var bingo = {
 
 		socket.on('check_number', function(data) {
 			self.where_is_it(data.num);
-			self.pring_msg(data.username + "님이 '" + data.num + "'을 선택했습니다.");
+			self.print_msg(data.username + "님이 '" + data.num + "'을 선택했습니다.");
 		});
 
 		socket.on("game_started", function(data) {
 			console.log("enter the game_started");
-			self.pring_msg(data.username + "님이 게임을 시작했습니다.");
+			self.print_msg(data.username + "님이 게임을 시작했습니다.");
 			$('#start_button').hide();
 		});
 
@@ -71,7 +71,7 @@ var bingo = {
 			this.check_num(obj);
 			this.is_my_turn = false;
 		} else {
-			this.pring_msg("<알림> 차례가 아닙니다.!");
+			this.print_msg("<알림> 차례가 아닙니다.!");
 		}
 	},
 
@@ -114,7 +114,7 @@ var bingo = {
 		});
 	},
 
-	pring_msg: function (msg) {
+	print_msg: function (msg) {
 		$("#logs").append(msg + "<br />");
 		$("#logs").scrollTop($("#logs")[0].scrollHeight);
 	}
