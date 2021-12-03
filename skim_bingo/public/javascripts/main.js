@@ -46,7 +46,7 @@ var bingo = {
 			$(this).html(numbers[i]);
 
 			$(this).click(function () {
-				if (user_cnt == 1) {
+				if (user_cnt === 1) {
 					self.print_msg("<알림> 최소 2명부터 게임이 가능합니다.");
 				} else {
 					self.select_num(this, socket);
@@ -99,14 +99,14 @@ var bingo = {
 
 		$.each(data, function (key, value) {
 			var turn  = "(-) ";
-			if (value.turn == true) {
+			if (value.turn === true) {
 				turn = "(*) ";
 
-				if (value.id == this_socket.id) {
+				if (value.id === this_socket.id) {
 					self.is_my_turn = true;
 				}
 			}
-			if (value.id == this_socket.id) {
+			if (value.id === this_socket.id) {
 				$("#list").append("<font color='DodgerBlue'>" + turn + value.name + "<br></font>");
 			} else {
 				$("#list").append("<font color='black'>" + turn + value.name + "<br></font>");

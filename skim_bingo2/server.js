@@ -1,24 +1,23 @@
 // skim_bingo2 server.js
 
-var exporess = require('express');
+var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
 
-app.set('vew engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
 	// 좀 더 고민해 볼 것
 	// res.render('main', { title: '온라인 빙고 게임', username: req.query.username });
-	res.render(paht.join(__dirname, 'public', 'views', 'main'), {
+	res.render(path.join(__dirname, 'public', 'views', 'main'), {
 		title: "skim_bingo2",
 		username: req.query.username
 	});
 });
-
 
 var users = {};
 var user_count = 0;
@@ -60,8 +59,18 @@ io.on('connection', function(socket) {
 		}
 		users[turn_count].turn = true;
 
-		io.socket.emit('update_users', users);
+		io.sockets.emit('update_users', users);
 	});
+
+	socket.on('disconnect', function() {
+		console.log('user disconnected : ', socket.id, socket.username);
+		for (var i = 0; i < user_count; i++) {
+			if (users[i].id === socket.id)
+				delete users[i];
+		}
+		user_count--;
+		io.emit('update_users', users, user_count);
+	})
 });
 
 http.listen(3000, function() {

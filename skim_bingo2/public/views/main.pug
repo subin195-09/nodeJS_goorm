@@ -4,4 +4,18 @@ block content
 	h1= title
 	p
 		font(color='DodgerBlue') username | 님 환영합니다
-	//- for 문으로 tr, td를 적용시키는 법 찾아보기
+	#game
+		#bingo
+			table.bingo-board
+				- for(var x = 0; x < 5; x++)
+					tr
+						td
+						td
+						td
+						td
+						td
+			#user
+				#list
+				#logs
+				input#start_button(type='button', value='시작')
+				input#username(type='hidden', value=username)

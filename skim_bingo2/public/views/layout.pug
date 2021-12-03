@@ -2,10 +2,11 @@ doctype html
 html(lang="en")
 	head
 		title= title
-		link(rel="stylesheet", href="/styleshets/style.css")
+		link(rel='stylesheet', href='/stylesheets/style.css')
 		script(src='socket.io/socket.io.js')
 		script(src='//code.jquery.com/jquery.min.js')
-		script(src='javascripts/main.js');
+		script(src='javascripts/main.js' defer)
+
 	body
 		center
 			block content
