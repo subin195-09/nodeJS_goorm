@@ -18,18 +18,22 @@ var users_num = 0;
 io.on('connection', function(socket) {
 	console.log('user connected: ', socket.id);
 	var name = 'user' + count++;
+	socket.name = name;
 	users[users_num] = {};
 	users[users_num].id = socket.id;
-	users[users_num++].name = name;
-	socket.name = name;
+	users[users_num].name = name;
+	users_num++;
 
-	io.to(socket.id).emit('create name', name, users, users_num);
+	io.emit('create name', name, users, users_num);
 
 	socket.on('disconnect', function() {
 		console.log('user disconnected: ' + socket.id + ' ' + socket.name);
 		for (var i = 0; i < users_num; i++) {
 			if (users[i].id === socket.id)
-				users.splice(i);
+			{
+				users.splice(i, 1);
+				break ;
+			}
 		}
 		users_num--;
 		io.emit('new_disconnect', socket.name, users, users_num);

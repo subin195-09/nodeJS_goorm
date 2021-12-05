@@ -4,9 +4,11 @@ var socket = io();
 
 var userlist_update = function (users, users_num) {
 	$('#listArea').empty();
-	for(var i = 0; i < users_num; i++) {
-		$('#listArea').append('<li>' + users[i].name + '</li>');
-	}
+	console.log(users);
+	users.forEach(user => {
+		console.log(user);
+		$('#listArea').append('<li class="list-group-item">' + user.name + '</li>');
+	});
 };
 
 $('#chat').on('submit', function(e) {
