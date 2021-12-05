@@ -12,16 +12,27 @@ app.get('/', (req, res) => {
 });
 
 var count = 1;
+var users = [];
+var users_num = 0;
 
 io.on('connection', function(socket) {
 	console.log('user connected: ', socket.id);
 	var name = 'user' + count++;
+	users[users_num] = {};
+	users[users_num].id = socket.id;
+	users[users_num++].name = name;
 	socket.name = name;
-	io.to(socket.id).emit('create name', name);
+
+	io.to(socket.id).emit('create name', name, users, users_num);
 
 	socket.on('disconnect', function() {
 		console.log('user disconnected: ' + socket.id + ' ' + socket.name);
-		io.emit('new_disconnect', socket.name);
+		for (var i = 0; i < users_num; i++) {
+			if (users[i].id === socket.id)
+				users.splice(i);
+		}
+		users_num--;
+		io.emit('new_disconnect', socket.name, users, users_num);
 	});
 
 	io.emit('new_connect', name);
@@ -30,7 +41,13 @@ io.on('connection', function(socket) {
 		console.log("send message: " + name + ' ' + text);
 		var msg = name + ': ' + text;
 		if (name != socket.name)
-			io.emit('change name', socket.name, name);
+		{
+			for (var i = 0; i < users_num; i++) {
+				if (users[i].id === socket.id)
+					users[i].name = name;
+			}
+			io.emit('change name', socket.name, name, users, users_num);
+		}
 		socket.name = name;
 		console.log(msg);
 		io.emit('receive message', msg);

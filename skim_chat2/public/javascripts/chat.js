@@ -1,4 +1,13 @@
+// skim_chat2 chat.js
+
 var socket = io();
+
+var userlist_update = function (users, users_num) {
+	$('#listArea').empty();
+	for(var i = 0; i < users_num; i++) {
+		$('#listArea').append('<li>' + users[i].name + '</li>');
+	}
+};
 
 $('#chat').on('submit', function(e) {
 	socket.emit('send message', $('#name').val(), $('#message').val());
@@ -7,20 +16,23 @@ $('#chat').on('submit', function(e) {
 	e.preventDefault();
 });
 
-socket.on('create name', function(name) {
+socket.on('create name', function(name, users, users_num) {
 	$('#name').val(name);
+	userlist_update(users, users_num);
 });
 
 socket.on('new_connect', function(name) {
 	$('#chatLog').append('<알림> ' + name + '님이 입장하셨습니다.\n');
 });
 
-socket.on('new_disconnect', function(name) {
+socket.on('new_disconnect', function(name, users, users_num) {
 	$('#chatLog').append('<알림> ' + name + '님이 퇴장하셨습니다.\n');
+	userlist_update(users, users_num);
 });
 
-socket.on('change name', function(oldName, name) {
+socket.on('change name', function(oldName, name, users, users_num) {
 	$('#chatLog').append('<알림> ' + oldName + '님이 ' + name + '님으로 변경되었습니다.\n');
+	userlist_update(users, users_num);
 });
 
 socket.on('receive message', function(msg) {

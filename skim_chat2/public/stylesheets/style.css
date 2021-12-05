@@ -1,17 +1,56 @@
-#chatLog{
-	width: 50%;
-	height: 500px;
+#userList {
+	float: left;
+	width: 30%;
+	height: 600px;
 }
-#name{
+
+#listArea {
+	width: 100%;
+	height: 100%;
+}
+
+#chat {
+	float: right;
+	width: 70%;
+	height: 600px;
+}
+
+#infoButton {
+	width: 100%;
+	height: 10%;
+}
+
+#infoButton > button {
+	width: 100%;
+	height: 100%;
+	font-size: 20px;
+}
+
+#chatArea {
+	height: 84%;
+}
+
+#chatLog {
+	height: 100%;
+}
+
+#chatForm {
+	width: 100%;
+	height: 6%;
+}
+
+#chatForm > * {
+	height: 100%;
+}
+
+#name {
 	width: 10%;
 }
 
 #message{
-	width: 35%;
+	width: 80%;
 }
 
-.btn.btn-info{
-	width: 50%;
-	height: 45px;
-	font-size: 20px;
+#submitBtn {
+	width: 10%;
 }

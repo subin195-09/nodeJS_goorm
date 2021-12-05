@@ -7,48 +7,17 @@ html(lang="en")
 		script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js", integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous")
 		script(src='/socket.io/socket.io.js')
 		script(src='//code.jquery.com/jquery-1.11.1.js')
-		//- script(src='javascripts/chat.js')
+		script(src='javascripts/chat.js' defer)
 	body
 		center
-			div
-				button.btn.btn-info(type='button') Skim2 채팅방
-			div
-				textarea#chatLog.form-control(readonly='')
-			form#chat
-				input#name.form-contorl(type='text')
-				input#message.form-contorl(type='text')
-				button.btn.btn-primary(type='submit') 전송
-			#box.box
-
-	script.
-		var socket = io();
-
-		console.log($('#chat'));
-		$('#chat').on('submit', function(e) {
-			socket.emit('send message', $('#name').val(), $('#message').val());
-			$('#message').val('');
-			$('#message').focus();
-			console.log("왜???");
-			e.preventDefault();
-		});
-
-		socket.on('create name', function(name) {
-			$('#name').val(name);
-		});
-
-		socket.on('new_connect', function(name) {
-			$('#chatLog').append('<알림> ' + name + '님이 입장하셨습니다.\n');
-		});
-
-		socket.on('new_disconnect', function(name) {
-			$('#chatLog').append('<알림> ' + name + '님이 퇴장하셨습니다.\n');
-		});
-
-		socket.on('change name', function(oldName, name) {
-			$('#chatLog').append('<알림> ' + oldName + '님이 ' + name + '님으로 변경되었습니다.\n');
-		});
-
-		socket.on('receive message', function(msg) {
-			$('#chatLog').append(msg + '\n');
-			$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
-		})
+			#userList
+				ul#listArea
+			#chat
+				#infoButton
+					button.btn.btn-info(type='button') Skim2 채팅방
+				#chatArea
+					textarea#chatLog.form-control(readonly='')
+				form#chatForm
+					input#name.form-contorl(type='text')
+					input#message.form-contorl(type='text')
+					button#submitBtn.btn.btn-primary(type='submit') 전송
