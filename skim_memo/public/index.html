@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>skim memo</title>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src='/javascripts/memo.js' defer></script>
+</head>
+<body>
+	<div id='main'>
+		<div id='title'>온라인 메모장 예제</div>
+		<div id='write'>
+			<div class='left'>
+				<input id='author' class='author' type='text' placeholder='메모 제목' />
+			</div>
+			<div class='right'>
+				<textarea placeholder="내용을 입력하세요"></textarea>
+				<br />
+				<input id='write_button' type='button' value='쓰기' />
+			</div>
+		</div>
+		<div id='memo'>
+			<div class='item'>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
