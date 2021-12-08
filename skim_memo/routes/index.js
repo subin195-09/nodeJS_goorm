@@ -2,19 +2,21 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://skim:<Tnqls195090!>@skimdb.ktbcn.mongodb.net/skimDB?retryWrites=true&w=majority', {useNewUrlParse: true});
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error: '));
-db.once('open', () => {
-  console.log('DB connected');
+var mongo_url = 'mongodb+srv://skim:Tnqls195090!@skimdb.ktbcn.mongodb.net/skimDB?retryWrites=true&w=majority';
+mongoose.connect(mongo_url, {useNewUrlParser: true}, (err) => {
+  if(err) {
+    console.log("skimdb_err !!! : ", err);
+  } else {
+    console.log("skimdb_connected");
+  }
 });
 
 var Schema = mongoose.Schema;
 
 var Memo = new Schema({
-  author: String,
-  contents: String,
-  date: Date
+	author: String,
+	contents: String,
+	date: Date
 });
 
 var memoModel = mongoose.model('Memo', Memo);
@@ -25,61 +27,67 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/load', function(req, res, next) {
-  memoModel.find({}, function(err, data) {
-    res.json(data);
-  });
+	memoModel.find({}, function(err, data){
+		res.json(data);
+	});
 });
 
-router.post('/write', function(req, res, next) {
-  var author = req.body.author;
-  var contents = req.body.contents;
-  var date = Date.now();
+router.post('/write', function(req,res,next) {
+	var author = req.body.author;
+	var contents = req.body.contents;
+	var date = Date.now();
 
-  var memo = new memoModel();
+	var memo = new memoModel();
 
-  memo.author = author;
-  memo.contents = contents;
-  memo.date = date;
-  memo.comments = [];
+	memo.author = author;
+	memo.contents = contents;
+	memo.date = date;
+	memo.comments = [];
 
-  memo.save(function (err) {
-    if (err) {
-      throw err;
-    } else {
-      res.json({status: "SUCCESS"});
-    }
-  });
+
+	memo.save(function (err) {
+		if (err) {
+			throw err;
+		}
+		else {
+			res.json({status: "SUCCESS"});
+		}
+	});
 });
 
 router.post('/del', function(req, res, next) {
-  var _id = req.body._id;
-  memoModel.deleteOne({_id: _id}, function(err, result) {
-    if (err) {
-      throw err;
-    } else {
-      res.json({status: "SUCCESS"});
-    }
-  });
+	var _id = req.body._id;
+	memoModel.remove({_id: _id}, function(err, result) {
+		if(err) {
+			throw err;
+		}
+		else {
+			res.json({status: "SUCCESS"});
+		}
+	});
 });
 
 router.post('/modify', function(req, res, next) {
-  var _id = req.body._id;
-  var contents = req.body.contents;
+	var _id = req.body._id;
+	var contents = req.body.contents;
 
-  memoModel.findOne({_id: _id}, function(err, memo) {
-    if (err) {
-      throw err;
-    } else {
-      memo.contents = contents;
-      memo.save(function (err) {
-        if (err) {
-          throw err;
-        } else {
-          res.json({status: "SUCCESS"});
-        }
-      });
-    }
-  });
+	memoModel.findOne({_id: _id}, function(err, memo) {
+		if(err) {
+			throw err;
+		}
+		else {
+			memo.contents = contents;
+
+			memo.save(function (err) {
+				if (err) {
+					throw err;
+				}
+				else {
+					res.json({status: "SUCCESS"});
+				}
+			});
+		}
+	});
 });
 
 module.exports = router;

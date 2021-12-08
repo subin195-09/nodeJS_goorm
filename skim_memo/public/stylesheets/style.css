@@ -8,56 +8,56 @@ a {
 }
 
 #main {
-  margin-left: auto;
-  margin-right: auto;
-  width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 800px;
 }
 
 #title {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 10px;
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 10px;
 }
 
 #write {
-  border: 1px solid #ccc;
-  height: 140px;
-  margin-bottom: 10px;
-  padding: 10px;
-  min-height: 100%;
-  text-align: right;
-  background-color: gainsboro;
+	border: 1px solid #ccc;
+	height: 140px;
+	margin-bottom: 10px;
+	padding: 10px;
+	min-height: 100%;
+	text-align: right;
+	background-color: Gainsboro;
 }
 
 .left {
-  float: left;
-  text-align: center;
+	float: left;
+	text-align: center;
 }
 
 .right {
-  float: right;
+	float: right;
 }
 
-#write textarea {
-  width: 630px;
-  height: 110px;
-  float: right;
-  margin-bottom: 5px;
+#write textarea{
+	width: 630px;
+	height: 110px;
+	float: right;
+	margin-bottom: 5px;
 }
 
-.text_input {
-  width: 100%;
-  height: 50px;
+.text_input{
+	width: 100%;
+	height: 50px;
 }
 
 #memo {
-  border: 1px solid #ddddaa;
-  background-color: lightblue;
+	border: 1px solid #ddddaa;
+	background-color: LightBlue;
 }
 
 #memo .item {
-  margin: 10px;
-  clear: both;
+	margin: 10px;
+	clear: both;
 }
 
 #memo .author {
