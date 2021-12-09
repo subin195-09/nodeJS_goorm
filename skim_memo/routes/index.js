@@ -2,15 +2,14 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
-var mongo_url = 'mongodb+srv://skim:Tnqls195090!@skimdb.ktbcn.mongodb.net/skimDB?retryWrites=true&w=majority';
-mongoose.connect(mongo_url, {useNewUrlParser: true}, (err) => {
-  if(err) {
-    console.log("skimdb_err !!! : ", err);
-  } else {
-    console.log("skimdb_connected");
-  }
-});
+var mongo_url = 'mongodb+srv://soobin:0909@skimmemo.ktbcn.mongodb.net/skimMemo?retryWrites=true&w=majority';
+mongoose.connect(mongo_url, {useNewUrlParser: true});
 
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+	console.log('DB connected');
+});
 var Schema = mongoose.Schema;
 
 var Memo = new Schema({

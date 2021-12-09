@@ -11,6 +11,7 @@ load = function () {
 		$(data).each(function (i) {
 			var id = this._id;
 			$('#memo').prepend("<div class='item'></div>");
+			$('#memo .item:first').append("<div class='photo_thumb'</div>");
 			$('#memo .item:first').append("<div class='author'><b>" + this.author + "</b>(" + this.date + ")&nbsp;&nbsp; <span class='text_button modify'>MODIFY</span> <span class='text_button del'>DELETE</span></div>");
 			$('#memo .item:first').append("<div class='contents " + id + "'>" + this.contents + "</div>");
 
@@ -23,7 +24,7 @@ load = function () {
 					cnt = 1;
 				}
 				$("#textarea_" + id).keypress(function(evt) {
-					if ((evt.keyCode || evt.which) === 13) {
+					if ((evt.keyCode || evt.which) === 13) { // enter key 입력
 						if (this.value != "") {
 							modify(this.value, id);
 							evt.preventDefault();
@@ -32,7 +33,7 @@ load = function () {
 				});
 			});
 
-			$("memo .item:first .del").click(function(evt) {
+			$("#memo .item:first .del").click(function(evt) {
 				del(id);
 			});
 		});
