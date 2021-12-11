@@ -1,13 +1,15 @@
-doctype doctype html
+//- views/index.pug
+
+doctype html
 html(lang="en")
 	head
 		meta(charset="UTF-8")
+		title skim_sns
 		script(src='//code.jquery.com/jquery.min.js')
 		script(src='/javascripts/main.js')
 		link(rel='stylesheet', href='/stylesheets/style.css')
-		title skim_sns
 	body
 		center
-			input#login_button.button(type='button' onclick='location.href=/auth/google' value='Login with Google')
-			input#logout_button.button(type='button' onclick='location.href=/logout' value='Logout')
+			input#login_button.button(type='button', onclick="location.href='/auth/google'", value='Login with Google')
+			input#logout_button.button(type='button', onclick="location.href='/logout'", value='Logout')
 		block content

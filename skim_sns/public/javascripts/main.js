@@ -49,6 +49,8 @@ var load = function() {
 					editing = false;
 				});
 
+				var cnt = 0;
+
 				$("#wall .item:first .modify").click(function(evt) {
 					editing = true;
 					if(cnt===0){
@@ -57,7 +59,7 @@ var load = function() {
 						cnt=1;
 					}
 					$("#textarea_" + id).keypress(function(evt) {
-						if((evt.keyCode || evt.which) == 13){
+						if((evt.keyCode || evt.which) === 13){
 							if(this.value !== "") {
 								modify(this.value, id);
 								evt.preventDefault();
@@ -84,7 +86,7 @@ var write = function(contents) {
 	var postdata = {
 		'author' : $('#author').val(),
 		'contents' : contents,
-		'picture' : $('#message').finc('.photo').attr('src')
+		'picture' : $('#message').find('.photo').attr('src')
 	};
 
 	$.post('/write', postdata, function() {
@@ -146,7 +148,7 @@ $(document).ready(function() {
 	});
 
 	$('#message textarea').keypress(function(e) {
-		if (e.keyCode || e.which == 13) {
+		if ((e.keyCode || e.which) == 13) {
 			if (this.value !== "") {
 				write(this.value);
 				e.preventDefault();

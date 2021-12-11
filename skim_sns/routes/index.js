@@ -1,13 +1,13 @@
 // routes/index.js
-
 var express = require('express');
 var router = express.Router();
 
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var googleCredentials = require('../config/google.json');
 
 var mongoose = require('mongoose');
-var db = mongoose.connect('mongodb+srv://skim:0909@skimsns.gwgni.mongodb.net/skimSNS?retryWrites=true&w=majority')
+var db = mongoose.connect('mongodb+srv://skim:0909@skimsns.gwgni.mongodb.net/skimSNS?retryWrites=true&w=majority', {useNewUrlParser: true});
 
 var Schema = mongoose.Schema;
 
@@ -20,12 +20,11 @@ var Post = new Schema({
   comments: Array
 });
 
-var postModel = mongoose.model('post', Post);
+var postModel = mongoose.model('Post', Post);
 
 var check_user = function(req) {
-  var answer;
-
-  if (req.session.passport === undefined|| req.session.passport.user === undefined) { // 비로그인 유저
+  // 아무런 로그인을 하지 않았을 경우 or 로그인 했다가 로그아웃 했을 때
+  if (req.session.passport === undefined || req.session.passport.user === undefined) { // 비로그인 유저
     console.log('로그인이 필요함');
     return (false);
   } else {
@@ -41,7 +40,7 @@ router.get('/', function(req, res, next) {
   if (req.user) {
     var name = req.user.displayName;
     var picture = req.user.photos[0].value;
-    res.render('index', { title: 'Express' });
+    res.render('index', { name: name, picture: picture });
   } else {
     res.render('index', { name: '비로그인 유저', picture: '/images/user.png' });
   }
@@ -57,7 +56,7 @@ router.get('/load', function(req, res, next) {
   });
 });
 
-router.get('/write', function(req, res, next) {
+router.post('/write', function(req, res, next) {
   var author = req.body.author;
   var picture = req.body.picture;
   var contents = req.body.contents;
@@ -79,10 +78,10 @@ router.get('/write', function(req, res, next) {
   });
 });
 
-router.get('/like', function(req, res, next) {
+router.post('/like', function(req, res, next) {
   var _id = req.body._id;
   var contents = req.body.contents;
-  postModel.findOne({_id: _id}, function(err, data) {
+  postModel.findOne({_id: _id}, function(err, post) {
     if (err) {
       throw err;
     } else {
@@ -99,7 +98,7 @@ router.get('/like', function(req, res, next) {
   });
 });
 
-router.get('/del', function(req, res, next) {
+router.post('/del', function(req, res, next) {
   var _id = req.body._id;
 
 	if(check_user(req)){
@@ -114,7 +113,7 @@ router.get('/del', function(req, res, next) {
 	}
 });
 
-router.get('/modify', function(req, res, next) {
+router.post('/modify', function(req, res, next) {
   var _id = req.body._id;
 	var contents = req.body.contents;
 
@@ -138,7 +137,7 @@ router.get('/modify', function(req, res, next) {
 	}
 });
 
-router.get('/comment', function(req, res, next) {
+router.post('/comment', function(req, res, next) {
   var _id = req.body._id;
 	var author = req.body.author;
 	var comment = req.body.comment;
@@ -162,5 +161,37 @@ router.get('/comment', function(req, res, next) {
 	});
 });
 
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+passport.use(new GoogleStrategy({
+  clientID: googleCredentials.web.client_id,
+  clientSecret: googleCredentials.web.client_secret,
+  callbackURL: "/auth/google/callback"
+  }, function(accessToken, refreshToken, profile, done) {
+    process.nextTick(function () {
+      return (done(null, profile));
+    });
+  }
+));
+
+router.get('/auth/google', passport.authenticate('google', {
+  scope: ['https://www.googleapis.com/auth/plus.login']
+}));
+
+router.get('/auth/google/callback', passport.authenticate('google', {
+  failureRedirect: '/login' }), function(req, res) {
+    res.redirect('/');
+});
+
+router.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+});
 
 module.exports = router;
